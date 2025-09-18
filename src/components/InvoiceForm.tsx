@@ -31,10 +31,10 @@ export const InvoiceForm = () => {
   const [invoiceNumber, setInvoiceNumber] = useState(`INV-${Date.now().toString().slice(-6)}`);
 
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
-    name: "The Golden Spoon",
-    address: "123 Main Street, City, State 12345",
+    name: "Doro Bet",
+    address: "4533 Baltimore Street, Philadelphia, PA 19143",
     phone: "(555) 123-4567",
-    email: "info@goldenspoon.com"
+    email: "contact@aliffamillyrestaurant.com"
   });
 
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -83,7 +83,7 @@ export const InvoiceForm = () => {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center print:hidden">
-        <h1 className="text-3xl font-bold text-invoice-header">Restaurant Invoice Generator</h1>
+        <h1 className="text-3xl font-bold text-invoice-header">Doro Bet Invoice Generator</h1>
         <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
           <Printer className="w-4 h-4 mr-2" />
           Print Invoice
@@ -103,7 +103,7 @@ export const InvoiceForm = () => {
               />
               <div>
                 <h1 className="text-3xl font-bold text-white">{restaurantInfo.name}</h1>
-                <p className="text-blue-200 mt-1">Professional Restaurant Services</p>
+                <p className="text-blue-200 mt-1">Ethiopian Fried Chicken</p>
               </div>
             </div>
             <div className="text-right">
