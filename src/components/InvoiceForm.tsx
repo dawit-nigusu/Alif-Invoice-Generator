@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, Plus, Printer } from "lucide-react";
-import restaurantLogo from "@/assets/restaurant-logo.png";
+import restaurantLogo from "@/assets/restaurant-logo.jpg";
 
 interface InvoiceItem {
   id: string;
