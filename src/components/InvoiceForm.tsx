@@ -31,9 +31,9 @@ export const InvoiceForm = () => {
   const [invoiceNumber, setInvoiceNumber] = useState(`INV-${Date.now().toString().slice(-6)}`);
 
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
-    name: "Doro Bet",
-    address: "4533 Baltimore Street, Philadelphia, PA 19143",
-    phone: "(267) 205-8855 ",
+    name: "Doro Bet / ዶሮ ቤት",
+    address: "4533 Baltimore Ave, Philadelphia, PA 19143",
+    phone: "(215) 921-6558 ",
     email: "contact@aliffamillyrestaurant.com"
   });
 
@@ -103,7 +103,7 @@ export const InvoiceForm = () => {
               />
               <div>
                 <h1 className="text-3xl font-bold text-white">{restaurantInfo.name}</h1>
-                <p className="text-blue-200 mt-1">Ethiopian Fried Chicken</p>
+                <p className="text-blue-200 mt-1">Ethiopian Chicken House</p>
               </div>
             </div>
             <div className="text-right">
