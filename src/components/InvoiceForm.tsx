@@ -33,7 +33,7 @@ export const InvoiceForm = () => {
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
     name: "Doro Bet",
     address: "4533 Baltimore Street, Philadelphia, PA 19143",
-    phone: "(555) 123-4567",
+    phone: "(267) 205-8855 ",
     email: "contact@aliffamillyrestaurant.com"
   });
 
