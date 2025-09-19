@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Plus, Printer } from "lucide-react";
 import restaurantLogo from "@/assets/restaurant-logo.jpg";
 
@@ -12,6 +13,13 @@ interface InvoiceItem {
   name: string;
   quantity: number;
   price: number;
+}
+
+interface PredefinedItem {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
 }
 
 interface RestaurantInfo {
@@ -30,6 +38,45 @@ interface CustomerInfo {
 export const InvoiceForm = () => {
   const [invoiceNumber, setInvoiceNumber] = useState(`INV-${Date.now().toString().slice(-6)}`);
 
+  // Predefined menu items with prices
+  const predefinedItems: PredefinedItem[] = [
+    // Fried Chicken
+    { id: "half-mild", name: "Half Mild Fried Chicken", price: 9.50, category: "Fried Chicken" },
+    { id: "half-spicy", name: "Half Spicy Fried Chicken", price: 9.50, category: "Fried Chicken" },
+    { id: "whole-mild", name: "Whole Mild Fried Chicken", price: 18.00, category: "Fried Chicken" },
+    { id: "whole-spicy", name: "Whole Spicy Fried Chicken", price: 18.00, category: "Fried Chicken" },
+    { id: "chicken-sandwich", name: "Chicken Sandwich", price: 10.00, category: "Fried Chicken" },
+
+    //vegans
+    { id: "felafal-wrap", name: "Felafal Wrap", price: 10.00, category: "Vegan Dishes" },
+    { id: "felafal-salad", name: "Felafal Salad", price: 10.00, category: "Vegan Dishes" },
+    { id: "fried-mushroom", name: "Fried Mushroom", price: 10.00, category: "Vegan Dishes" },
+    
+    // Traditional Dishes
+    { id: "doro-wot", name: "Doro Wot (Chicken Stew)", price: 14.00, category: "Main Dishes" },
+    { id: "doro-tibs", name: "Doro Tibs (Chicken Tibs)", price: 13.50, category: "Main Dishes" },
+   
+    //shawarma
+    { id: "shawarma-wrap", name: "Shawarma", price: 10.00, category: "Shawarma" },
+    { id: "shawarma-salad", name: "Shawarma Salad", price: 10.00, category: "Shawarma" },
+    
+    //sides
+    { id: "gomen", name: "Gomen (Collard Greens)", price: 11.99, category: "Sides" },
+    { id: "mac-n-cheese", name: "Mac N Cheese", price: 11.99, category: "Sides" },
+    { id: "french-fries", name: "French Fries", price: 11.99, category: "Sides" },
+    
+    // Beverages
+    { id: "ethiopian-coffee", name: "Ethiopian Coffee", price: 4.99, category: "Beverages" },
+    { id: "biriz", name: "Biriz (Fermented Honey Water)", price: 4.00, category: "Beverages" },
+    { id: "kerkede", name: "Kerkede (Hibiscus Iced Tea)", price: 5.50, category: "Beverages" },
+    { id: "soft-drink", name: "Soft Drink", price: 2.99, category: "Beverages" },
+    { id: "ambo", name: "Ethiopian Sparkling Water (Ambo)", price: 4.00, category: "Beverages" },
+    
+    //desserts
+    { id: "tres-leches", name: "Cardamom Tres Leches Cake", price: 8.99, category: "Desserts" },
+    { id: "tiramisu", name: "Tiramisu", price: 8.99, category: "Desserts" },
+  ];
+
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
     name: "Doro Bet / ዶሮ ቤት",
     address: "4533 Baltimore Ave, Philadelphia, PA 19143",
@@ -43,11 +90,10 @@ export const InvoiceForm = () => {
     date: new Date().toISOString().split('T')[0]
   });
 
-  const [items, setItems] = useState<InvoiceItem[]>([
-    { id: "1", name: "", quantity: 1, price: 0 }
-  ]);
+  const [items, setItems] = useState<InvoiceItem[]>([]);
 
-  const [taxRate, setTaxRate] = useState(8.5);
+  const [taxRate, setTaxRate] = useState(15);
+  const [selectKey, setSelectKey] = useState(0); // For resetting the select component
 
   const addItem = () => {
     const newItem: InvoiceItem = {
@@ -59,10 +105,21 @@ export const InvoiceForm = () => {
     setItems([...items, newItem]);
   };
 
-  const removeItem = (id: string) => {
-    if (items.length > 1) {
-      setItems(items.filter(item => item.id !== id));
+  const addPredefinedItem = (predefinedItemId: string) => {
+    const predefinedItem = predefinedItems.find(item => item.id === predefinedItemId);
+    if (predefinedItem) {
+      const newItem: InvoiceItem = {
+        id: Date.now().toString(),
+        name: predefinedItem.name,
+        quantity: 1,
+        price: predefinedItem.price
+      };
+      setItems([...items, newItem]);
     }
+  };
+
+  const removeItem = (id: string) => {
+    setItems(items.filter(item => item.id !== id));
   };
 
   const updateItem = (id: string, field: keyof InvoiceItem, value: string | number) => {
@@ -202,10 +259,95 @@ export const InvoiceForm = () => {
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold text-invoice-header">Items & Services</h3>
-            <Button onClick={addItem} size="sm" variant="outline" className="print:hidden">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Item
-            </Button>
+            <div className="flex gap-2 print:hidden">
+              <Select 
+                key={selectKey}
+                onValueChange={(value) => {
+                  if (value === "manual") {
+                    addItem();
+                  } else {
+                    addPredefinedItem(value);
+                  }
+                  // Reset the select component to show "Add Item" again
+                  setSelectKey(prev => prev + 1);
+                }}
+              >
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Add Item" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="manual">
+                    <div className="flex items-center">
+                      <Plus className="w-4 h-4 mr-2" />
+                      Manual Entry
+                    </div>
+                  </SelectItem>
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Fried Chicken</div>
+                  {predefinedItems.filter(item => item.category === "Fried Chicken").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Vegan Dishes</div>
+                  {predefinedItems.filter(item => item.category === "Vegan Dishes").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Main Dishes</div>
+                  {predefinedItems.filter(item => item.category === "Main Dishes").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Shawarma</div>
+                  {predefinedItems.filter(item => item.category === "Shawarma").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Sides</div>
+                  {predefinedItems.filter(item => item.category === "Sides").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Beverages</div>
+                  {predefinedItems.filter(item => item.category === "Beverages").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Desserts</div>
+                  {predefinedItems.filter(item => item.category === "Desserts").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           
           <div className="border border-border rounded-lg overflow-hidden">
@@ -222,43 +364,51 @@ export const InvoiceForm = () => {
             
             {/* Table Items */}
             <div className="divide-y divide-border">
-              {items.map((item, index) => (
-                <div key={item.id} className="grid grid-cols-12 gap-4 items-center p-3 hover:bg-muted/30">
-                  <div className="col-span-5">
-                    <Input
-                      value={item.name}
-                      onChange={(e) => updateItem(item.id, 'name', e.target.value)}
-                      placeholder="e.g., Margherita Pizza"
-                      className="border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 print:bg-transparent"
-                    />
+              {items.length === 0 ? (
+                <div className="p-8 text-center">
+                  <div className="text-muted-foreground">
+                    <Plus className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No items added yet</p>
+                    <p className="text-xs mt-1">Use the dropdown above to add items to your invoice</p>
                   </div>
-                  <div className="col-span-2">
-                    <Input
-                      type="number"
-                      min="1"
-                      value={item.quantity}
-                      onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
-                      className="text-center border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 print:bg-transparent"
-                    />
-                  </div>
-                  <div className="col-span-2 text-right">
-                    <div className="flex items-center justify-end">
-                      <span className="text-sm text-muted-foreground mr-1">$</span>
+                </div>
+              ) : (
+                items.map((item, index) => (
+                  <div key={item.id} className="grid grid-cols-12 gap-4 items-center p-3 hover:bg-muted/30">
+                    <div className="col-span-5">
                       <Input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={item.price}
-                        onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)}
-                        className="text-right border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 w-20 print:bg-transparent"
+                        value={item.name}
+                        onChange={(e) => updateItem(item.id, 'name', e.target.value)}
+                        placeholder="e.g., Margherita Pizza"
+                        className="border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 print:bg-transparent"
                       />
                     </div>
-                  </div>
-                  <div className="col-span-2 text-right font-semibold">
-                    ${(item.quantity * item.price).toFixed(2)}
-                  </div>
-                  <div className="col-span-1 print:hidden">
-                    {items.length > 1 && (
+                    <div className="col-span-2">
+                      <Input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                        className="text-center border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 print:bg-transparent"
+                      />
+                    </div>
+                    <div className="col-span-2 text-right">
+                      <div className="flex items-center justify-end">
+                        <span className="text-sm text-muted-foreground mr-1">$</span>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={item.price}
+                          onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)}
+                          className="text-right border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 w-20 print:bg-transparent"
+                        />
+                      </div>
+                    </div>
+                    <div className="col-span-2 text-right font-semibold">
+                      ${(item.quantity * item.price).toFixed(2)}
+                    </div>
+                    <div className="col-span-1 print:hidden">
                       <Button
                         onClick={() => removeItem(item.id)}
                         size="sm"
@@ -267,10 +417,10 @@ export const InvoiceForm = () => {
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
-                    )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
