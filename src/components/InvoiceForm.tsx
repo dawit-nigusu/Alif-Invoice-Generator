@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Plus, Printer } from "lucide-react";
 import restaurantLogo from "@/assets/restaurant-logo.jpg";
@@ -41,40 +42,38 @@ export const InvoiceForm = () => {
   // Predefined menu items with prices
   const predefinedItems: PredefinedItem[] = [
     // Fried Chicken
-    { id: "half-mild", name: "Half Mild Fried Chicken", price: 9.50, category: "Fried Chicken" },
-    { id: "half-spicy", name: "Half Spicy Fried Chicken", price: 9.50, category: "Fried Chicken" },
-    { id: "whole-mild", name: "Whole Mild Fried Chicken", price: 18.00, category: "Fried Chicken" },
-    { id: "whole-spicy", name: "Whole Spicy Fried Chicken", price: 18.00, category: "Fried Chicken" },
-    { id: "chicken-sandwich", name: "Chicken Sandwich", price: 10.00, category: "Fried Chicken" },
+    { id: "alicha-mild", name: "Alicha (Turmeric Lemon - Mild)", price: 9.00, category: "Fried Chicken" },
+    { id: "awaze-spicy", name: "Awaze (Berbere Spice - Spicy)", price: 9.00, category: "Fried Chicken" },
+    { id: "chicken-sandwich", name: "Crispy Fried Chicken Sandwich", price: 13.00, category: "Fried Chicken" },
 
-    //vegans
-    { id: "felafal-wrap", name: "Felafal Wrap", price: 10.00, category: "Vegan Dishes" },
-    { id: "felafal-salad", name: "Felafal Salad", price: 10.00, category: "Vegan Dishes" },
-    { id: "fried-mushroom", name: "Fried Mushroom", price: 10.00, category: "Vegan Dishes" },
+    // Traditional Eats
+    { id: "doro-wot-half", name: "Doro Wot - Half", price: 120.00, category: "Traditional Eats" },
+    { id: "doro-wot-full", name: "Doro Wot - Full", price: 240.00, category: "Traditional Eats" },
+    { id: "doro-tibs-half", name: "Doro Tibs - Half", price: 130.00, category: "Traditional Eats" },
+    { id: "doro-tibs-full", name: "Doro Tibs - Full", price: 240.00, category: "Traditional Eats" },
     
-    // Traditional Dishes
-    { id: "doro-wot", name: "Doro Wot (Chicken Stew)", price: 14.00, category: "Main Dishes" },
-    { id: "doro-tibs", name: "Doro Tibs (Chicken Tibs)", price: 13.50, category: "Main Dishes" },
-   
-    //shawarma
-    { id: "shawarma-wrap", name: "Shawarma", price: 10.00, category: "Shawarma" },
-    { id: "shawarma-salad", name: "Shawarma Salad", price: 10.00, category: "Shawarma" },
+    // Shawarma
+    { id: "shawarma-wrap", name: "Shawarma Wrap", price: 12.00, category: "Shawarma" },
+    { id: "shawarma-salad", name: "Shawarma Salad", price: 120.00, category: "Shawarma" },
     
-    //sides
-    { id: "gomen", name: "Gomen (Collard Greens)", price: 11.99, category: "Sides" },
-    { id: "mac-n-cheese", name: "Mac N Cheese", price: 11.99, category: "Sides" },
-    { id: "french-fries", name: "French Fries", price: 11.99, category: "Sides" },
+    // Vegan Bites
+    { id: "enguday-half", name: "Enguday (Fried Mushrooms) - Half", price: 75.00, category: "Vegan Bites" },
+    { id: "enguday-full", name: "Enguday (Fried Mushrooms) - Full", price: 150.00, category: "Vegan Bites" },
+    { id: "falafal-salad", name: "Falafel Salad", price: 55.00, category: "Vegan Bites" },
+    { id: "falafal-wrap", name: "Falafel Wrap", price: 10.00, category: "Vegan Bites" },
     
-    // Beverages
-    { id: "ethiopian-coffee", name: "Ethiopian Coffee", price: 4.99, category: "Beverages" },
-    { id: "biriz", name: "Biriz (Fermented Honey Water)", price: 4.00, category: "Beverages" },
-    { id: "kerkede", name: "Kerkede (Hibiscus Iced Tea)", price: 5.50, category: "Beverages" },
-    { id: "soft-drink", name: "Soft Drink", price: 2.99, category: "Beverages" },
-    { id: "ambo", name: "Ethiopian Sparkling Water (Ambo)", price: 4.00, category: "Beverages" },
+    // Sides
+    { id: "mac-n-cheese-half", name: "Ajda's Mac N Cheese - Half", price: 50.00, category: "Sides" },
+    { id: "mac-n-cheese-full", name: "Ajda's Mac N Cheese - Full", price: 100.00, category: "Sides" },
+    { id: "addis-fries-half", name: "Addis Fries (Spiced) - Half", price: 50.00, category: "Sides" },
+    { id: "addis-fries-full", name: "Addis Fries (Spiced) - Full", price: 100.00, category: "Sides" },
+    { id: "collard-greens-half", name: "Collard Greens - Half", price: 50.00, category: "Sides" },
+    { id: "collard-greens-full", name: "Collard Greens - Full", price: 100.00, category: "Sides" },
     
-    //desserts
-    { id: "tres-leches", name: "Cardamom Tres Leches Cake", price: 8.99, category: "Desserts" },
-    { id: "tiramisu", name: "Tiramisu", price: 8.99, category: "Desserts" },
+    // Sauces & Drinks
+    { id: "sauce-8oz", name: "Sauce (8oz each)", price: 6.00, category: "Sauces & Drinks" },
+    { id: "birz-1gal", name: "Birz 1 Gallon (Fermented Honey)", price: 50.00, category: "Sauces & Drinks" },
+    { id: "kerkede-1gal", name: "Kerkede 1 Gallon (Hibiscus Iced Tea)", price: 50.00, category: "Sauces & Drinks" },
   ];
 
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
@@ -92,7 +91,7 @@ export const InvoiceForm = () => {
 
   const [items, setItems] = useState<InvoiceItem[]>([]);
 
-  const [taxRate, setTaxRate] = useState(15);
+  const [taxRate, setTaxRate] = useState(8.5);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
 
   const addItem = () => {
@@ -136,6 +135,7 @@ export const InvoiceForm = () => {
     window.print();
   };
 
+
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
@@ -165,7 +165,7 @@ export const InvoiceForm = () => {
             </div>
             <div className="text-right">
               <div className="bg-white text-invoice-header rounded-lg px-4 py-2 inline-block">
-                <div className="text-sm font-medium">INVOICE</div>
+                <div className="text-sm font-medium">INVOICE No</div>
                 <div className="text-lg font-bold">{invoiceNumber}</div>
               </div>
             </div>
@@ -174,80 +174,77 @@ export const InvoiceForm = () => {
 
         {/* Restaurant Contact Info */}
         <div className="bg-invoice-section border-b p-6">
-          <div className="grid grid-cols-2 gap-8">
-            <div>
+          <div className="grid grid-cols-5 gap-8">
+            <div className="col-span-3">
               <h3 className="font-semibold text-invoice-header mb-3">Contact Information</h3>
               <div className="space-y-2 text-sm">
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Name:</Label>
                   <Input
                     value={restaurantInfo.name}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, name: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Address:</Label>
                   <Input
                     value={restaurantInfo.address}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, address: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Phone:</Label>
                   <Input
                     value={restaurantInfo.phone}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, phone: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Email:</Label>
                   <Input
                     value={restaurantInfo.email}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, email: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
               </div>
             </div>
-            <div>
+            <div className="col-span-2">
               <h3 className="font-semibold text-invoice-header mb-3">Bill To</h3>
               <div className="space-y-2 text-sm">
-                <div className="grid grid-cols-3 gap-2">
-                  <Label className="text-xs text-muted-foreground">Customer:</Label>
-                  <Input
+                <div className="grid grid-cols-3 gap-1 items-start">
+                  <Label className="text-xs text-muted-foreground">Bill To:</Label>
+                  <Textarea
                     value={customerInfo.name}
                     onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
+                    className="col-span-2 min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent resize-none overflow-hidden"
                     placeholder="Customer name"
+                    rows={1}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = 'auto';
+                      target.style.height = `${target.scrollHeight}px`;
+                    }}
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-2">
-                  <Label className="text-xs text-muted-foreground">Table:</Label>
-                  <Input
-                    value={customerInfo.table}
-                    onChange={(e) => setCustomerInfo({...customerInfo, table: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
-                    placeholder="Table number"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Date:</Label>
                   <Input
                     type="date"
                     value={customerInfo.date}
                     onChange={(e) => setCustomerInfo({...customerInfo, date: e.target.value})}
-                    className="col-span-2 h-8 text-sm print:border-none print:shadow-none print:bg-transparent"
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-2 print:hidden">
+                <div className="grid grid-cols-3 gap-1 items-start print:hidden">
                   <Label className="text-xs text-muted-foreground">Invoice #:</Label>
                   <Input
                     value={invoiceNumber}
                     onChange={(e) => setInvoiceNumber(e.target.value)}
-                    className="col-span-2 h-8 text-sm"
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 break-words"
                   />
                 </div>
               </div>
@@ -291,17 +288,8 @@ export const InvoiceForm = () => {
                       </div>
                     </SelectItem>
                   ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Vegan Dishes</div>
-                  {predefinedItems.filter(item => item.category === "Vegan Dishes").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Main Dishes</div>
-                  {predefinedItems.filter(item => item.category === "Main Dishes").map((item) => (
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Traditional Eats</div>
+                  {predefinedItems.filter(item => item.category === "Traditional Eats").map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       <div className="flex justify-between items-center w-full">
                         <span>{item.name}</span>
@@ -318,6 +306,15 @@ export const InvoiceForm = () => {
                       </div>
                     </SelectItem>
                   ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Vegan Bites</div>
+                  {predefinedItems.filter(item => item.category === "Vegan Bites").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
                   <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Sides</div>
                   {predefinedItems.filter(item => item.category === "Sides").map((item) => (
                     <SelectItem key={item.id} value={item.id}>
@@ -327,17 +324,8 @@ export const InvoiceForm = () => {
                       </div>
                     </SelectItem>
                   ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Beverages</div>
-                  {predefinedItems.filter(item => item.category === "Beverages").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Desserts</div>
-                  {predefinedItems.filter(item => item.category === "Desserts").map((item) => (
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Sauces & Drinks</div>
+                  {predefinedItems.filter(item => item.category === "Sauces & Drinks").map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       <div className="flex justify-between items-center w-full">
                         <span>{item.name}</span>
@@ -393,17 +381,15 @@ export const InvoiceForm = () => {
                       />
                     </div>
                     <div className="col-span-2 text-right">
-                      <div className="flex items-center justify-end">
-                        <span className="text-sm text-muted-foreground mr-1">$</span>
-                        <Input
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          value={item.price}
-                          onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)}
-                          className="text-right border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 w-20 print:bg-transparent"
-                        />
-                      </div>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={item.price}
+                        onChange={(e) => updateItem(item.id, 'price', parseFloat(e.target.value) || 0)}
+                        className="text-right border-none shadow-none py-0 px-2 h-auto bg-transparent focus-visible:ring-0 w-20 print:bg-transparent"
+                        placeholder="0.00"
+                      />
                     </div>
                     <div className="col-span-2 text-right font-semibold">
                       ${(item.quantity * item.price).toFixed(2)}
@@ -455,27 +441,18 @@ export const InvoiceForm = () => {
                   <span className="text-lg font-semibold">${tax.toFixed(2)}</span>
                 </div>
                 
-                <div className="flex justify-between items-center py-3 bg-invoice-total/10 px-4 rounded-lg border-2 border-invoice-total/20">
-                  <span className="text-xl font-bold text-invoice-total">TOTAL:</span>
-                  <span className="text-2xl font-bold text-invoice-total">${total.toFixed(2)}</span>
+                <div className="flex justify-between items-center py-3 border-b border-border">
+                  <span className="text-xl font-bold text-black">TOTAL:</span>
+                  <span className="text-2xl font-bold text-black">${total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Professional Footer */}
-        <div className="bg-invoice-header/5 p-6 text-center border-t">
-          <div className="space-y-2">
-            <p className="font-semibold text-invoice-header">Thank you for dining with us!</p>
-            <p className="text-sm text-muted-foreground">
-              Payment is due within 30 days. Please keep this invoice for your records.
-            </p>
-            <div className="flex justify-center gap-8 text-xs text-muted-foreground mt-4">
-              <span>Invoice #{invoiceNumber}</span>
-              <span>Generated on {new Date().toLocaleDateString()}</span>
-            </div>
-          </div>
+        {/* Footer */}
+        <div className="p-6 text-center">
+          <p className="text-lg font-medium text-black">Thank You!</p>
         </div>
       </div>
     </div>
