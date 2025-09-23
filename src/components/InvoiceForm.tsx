@@ -451,7 +451,10 @@ export const InvoiceForm = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-6 text-center">
+        <div className="p-6 text-center space-y-3">
+          <p className="text-xs text-muted-foreground italic">
+            Your total does not include tax, gratuity and 3% credit card processing fee
+          </p>
           <p className="text-lg font-medium text-black">Thank You!</p>
         </div>
       </div>
