@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Plus, Printer } from "lucide-react";
 import restaurantLogo from "@/assets/restaurant-logo.jpg";
@@ -93,6 +94,7 @@ export const InvoiceForm = () => {
 
   const [taxRate, setTaxRate] = useState(8.5);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
 
   const addItem = () => {
     const newItem: InvoiceItem = {
@@ -141,10 +143,22 @@ export const InvoiceForm = () => {
       {/* Header */}
       <div className="flex justify-between items-center print:hidden">
         <h1 className="text-3xl font-bold text-invoice-header">Doro Bet Invoice Generator</h1>
-        <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
-          <Printer className="w-4 h-4 mr-2" />
-          Print Invoice
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="disclaimer-toggle"
+              checked={showDisclaimer}
+              onCheckedChange={(checked) => setShowDisclaimer(checked === true)}
+            />
+            <Label htmlFor="disclaimer-toggle" className="text-sm">
+              Show payment disclaimer
+            </Label>
+          </div>
+          <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
+            <Printer className="w-4 h-4 mr-2" />
+            Print Invoice
+          </Button>
+        </div>
       </div>
 
       {/* Invoice Content */}
@@ -452,9 +466,11 @@ export const InvoiceForm = () => {
 
         {/* Footer */}
         <div className="p-6 text-center space-y-3">
-          <p className="text-xs text-muted-foreground italic">
-            Your total does not include tax, gratuity and 3% credit card processing fee
-          </p>
+          {showDisclaimer && (
+            <p className="text-xs text-muted-foreground italic">
+              Your total does not include tax, gratuity and 3% credit card processing fee
+            </p>
+          )}
           <p className="text-lg font-medium text-black">Thank You!</p>
         </div>
       </div>
