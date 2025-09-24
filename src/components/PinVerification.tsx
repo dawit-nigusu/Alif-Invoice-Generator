@@ -10,7 +10,7 @@ interface PinVerificationProps {
   onAuthenticated: () => void;
 }
 
-const CORRECT_PIN = "0000"; // Static PIN - you can change this
+const CORRECT_PIN = "9595"; // Static PIN - you can change this
 
 export const PinVerification = ({ onAuthenticated }: PinVerificationProps) => {
   const [pin, setPin] = useState("");

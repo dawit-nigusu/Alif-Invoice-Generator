@@ -33,6 +33,7 @@ interface RestaurantInfo {
 
 interface CustomerInfo {
   name: string;
+  phone: string;
   table: string;
   date: string;
 }
@@ -64,8 +65,8 @@ export const InvoiceForm = () => {
     { id: "falafal-wrap", name: "Falafel Wrap", price: 10.00, category: "Vegan Bites" },
     
     // Sides
-    { id: "mac-n-cheese-half", name: "Ajda's Mac N Cheese - Half", price: 50.00, category: "Sides" },
-    { id: "mac-n-cheese-full", name: "Ajda's Mac N Cheese - Full", price: 100.00, category: "Sides" },
+    { id: "mac-n-cheese-half", name: "Aida's Mac N Cheese - Half", price: 50.00, category: "Sides" },
+    { id: "mac-n-cheese-full", name: "Aida's Mac N Cheese - Full", price: 100.00, category: "Sides" },
     { id: "addis-fries-half", name: "Addis Fries (Spiced) - Half", price: 50.00, category: "Sides" },
     { id: "addis-fries-full", name: "Addis Fries (Spiced) - Full", price: 100.00, category: "Sides" },
     { id: "collard-greens-half", name: "Collard Greens - Half", price: 50.00, category: "Sides" },
@@ -75,6 +76,9 @@ export const InvoiceForm = () => {
     { id: "sauce-8oz", name: "Sauce (8oz each)", price: 6.00, category: "Sauces & Drinks" },
     { id: "birz-1gal", name: "Birz 1 Gallon (Fermented Honey)", price: 50.00, category: "Sauces & Drinks" },
     { id: "kerkede-1gal", name: "Kerkede 1 Gallon (Hibiscus Iced Tea)", price: 50.00, category: "Sauces & Drinks" },
+    
+    // Services
+    { id: "delivery", name: "Delivery", price: 50.00, category: "Services" },
   ];
 
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
@@ -86,6 +90,7 @@ export const InvoiceForm = () => {
 
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: "",
+    phone: "",
     table: "",
     date: new Date().toISOString().split('T')[0]
   });
@@ -95,6 +100,7 @@ export const InvoiceForm = () => {
   const [taxRate, setTaxRate] = useState(8.5);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
   const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [disclaimerText, setDisclaimerText] = useState("Your total does not include tax, gratuity and 3% credit card processing fee");
 
   const addItem = () => {
     const newItem: InvoiceItem = {
@@ -144,15 +150,32 @@ export const InvoiceForm = () => {
       <div className="flex justify-between items-center print:hidden">
         <h1 className="text-3xl font-bold text-invoice-header">Doro Bet Invoice Generator</h1>
         <div className="flex items-center gap-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="disclaimer-toggle"
-              checked={showDisclaimer}
-              onCheckedChange={(checked) => setShowDisclaimer(checked === true)}
-            />
-            <Label htmlFor="disclaimer-toggle" className="text-sm">
-              Show payment disclaimer
-            </Label>
+          <div className="space-y-2">
+            <div className="flex items-center space-x-2">
+              <Checkbox 
+                id="disclaimer-toggle"
+                checked={showDisclaimer}
+                onCheckedChange={(checked) => setShowDisclaimer(checked === true)}
+              />
+              <Label htmlFor="disclaimer-toggle" className="text-sm">
+                Show payment disclaimer
+              </Label>
+            </div>
+            {showDisclaimer && (
+              <div className="ml-6">
+                <Label htmlFor="disclaimer-text" className="text-xs text-muted-foreground">
+                  Disclaimer text:
+                </Label>
+                <Textarea
+                  id="disclaimer-text"
+                  value={disclaimerText}
+                  onChange={(e) => setDisclaimerText(e.target.value)}
+                  className="mt-1 text-xs resize-none"
+                  placeholder="Enter disclaimer text..."
+                  rows={2}
+                />
+              </div>
+            )}
           </div>
           <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
             <Printer className="w-4 h-4 mr-2" />
@@ -242,6 +265,16 @@ export const InvoiceForm = () => {
                       target.style.height = 'auto';
                       target.style.height = `${target.scrollHeight}px`;
                     }}
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-1 items-start">
+                  <Label className="text-xs text-muted-foreground">Phone:</Label>
+                  <Input
+                    type="tel"
+                    value={customerInfo.phone}
+                    onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
+                    placeholder="Phone number"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-1 items-start">
@@ -340,6 +373,15 @@ export const InvoiceForm = () => {
                   ))}
                   <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Sauces & Drinks</div>
                   {predefinedItems.filter(item => item.category === "Sauces & Drinks").map((item) => (
+                    <SelectItem key={item.id} value={item.id}>
+                      <div className="flex justify-between items-center w-full">
+                        <span>{item.name}</span>
+                        <span className="text-muted-foreground ml-4">${item.price}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Services</div>
+                  {predefinedItems.filter(item => item.category === "Services").map((item) => (
                     <SelectItem key={item.id} value={item.id}>
                       <div className="flex justify-between items-center w-full">
                         <span>{item.name}</span>
@@ -466,9 +508,9 @@ export const InvoiceForm = () => {
 
         {/* Footer */}
         <div className="p-6 text-center space-y-3">
-          {showDisclaimer && (
+          {showDisclaimer && disclaimerText && (
             <p className="text-xs text-muted-foreground italic">
-              Your total does not include tax, gratuity and 3% credit card processing fee
+              {disclaimerText}
             </p>
           )}
           <p className="text-lg font-medium text-black">Thank You!</p>
