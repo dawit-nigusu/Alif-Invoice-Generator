@@ -34,6 +34,7 @@ interface RestaurantInfo {
 interface CustomerInfo {
   name: string;
   phone: string;
+  email: string;
   table: string;
   date: string;
 }
@@ -91,6 +92,7 @@ export const InvoiceForm = () => {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: "",
     phone: "",
+    email: "",
     table: "",
     date: new Date().toISOString().split('T')[0]
   });
@@ -275,6 +277,16 @@ export const InvoiceForm = () => {
                     onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
                     className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
                     placeholder="Phone number"
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-1 items-start">
+                  <Label className="text-xs text-muted-foreground">Email:</Label>
+                  <Input
+                    type="email"
+                    value={customerInfo.email}
+                    onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
+                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
+                    placeholder="Email address"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-1 items-start">
