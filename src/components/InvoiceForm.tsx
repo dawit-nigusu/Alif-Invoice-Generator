@@ -85,7 +85,7 @@ export const InvoiceForm = () => {
     name: "Doro Bet / ዶሮ ቤት",
     address: "4533 Baltimore Ave, Philadelphia, PA 19143",
     phone: "(215) 921-6558 ",
-    email: "contact@aliffamillyrestaurant.com"
+    email: "dorobetphl@gmail.com"
   });
 
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -99,7 +99,7 @@ export const InvoiceForm = () => {
 
   const [taxRate, setTaxRate] = useState(8.5);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
-  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [disclaimerText, setDisclaimerText] = useState("Your total does not include tax, gratuity and 3% credit card processing fee");
 
   const addItem = () => {
