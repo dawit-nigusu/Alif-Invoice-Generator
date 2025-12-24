@@ -1,11 +1,7 @@
-import { InvoiceForm } from "@/components/InvoiceForm";
+import { Navigate } from "react-router-dom";
 
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <InvoiceForm />
-    </div>
-  );
+  return <Navigate to="/invoices" replace />;
 };
 
 export default Index;

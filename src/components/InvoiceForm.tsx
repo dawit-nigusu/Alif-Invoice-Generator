@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Trash2, Plus, Printer } from "lucide-react";
+import { Trash2, Plus, Printer, Save } from "lucide-react";
 import restaurantLogo from "@/assets/restaurant-logo.jpg";
+import type { InvoiceFormData } from "@/types/invoice";
 
 interface InvoiceItem {
   id: string;
@@ -39,7 +40,13 @@ interface CustomerInfo {
   date: string;
 }
 
-export const InvoiceForm = () => {
+interface InvoiceFormProps {
+  initialData?: InvoiceFormData | null;
+  onSave?: (data: InvoiceFormData) => void;
+  isNew?: boolean;
+}
+
+export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormProps) => {
   const [invoiceNumber, setInvoiceNumber] = useState(`INV-${Date.now().toString().slice(-6)}`);
 
   // Predefined menu items with prices
@@ -103,6 +110,20 @@ export const InvoiceForm = () => {
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [disclaimerText, setDisclaimerText] = useState("Your total does not include tax, gratuity and 3% credit card processing fee");
+  const [saving, setSaving] = useState(false);
+
+  // Load initial data if provided
+  useEffect(() => {
+    if (initialData) {
+      setInvoiceNumber(initialData.invoiceNumber);
+      setRestaurantInfo(initialData.restaurantInfo);
+      setCustomerInfo(initialData.customerInfo);
+      setItems(initialData.items);
+      setTaxRate(initialData.taxRate);
+      setShowDisclaimer(initialData.showDisclaimer);
+      setDisclaimerText(initialData.disclaimerText);
+    }
+  }, [initialData]);
 
   const addItem = () => {
     const newItem: InvoiceItem = {
@@ -145,6 +166,28 @@ export const InvoiceForm = () => {
     window.print();
   };
 
+  const handleSave = async () => {
+    if (!onSave) return;
+    
+    setSaving(true);
+    try {
+      const formData: InvoiceFormData = {
+        invoiceNumber,
+        restaurantInfo,
+        customerInfo,
+        items,
+        taxRate,
+        showDisclaimer,
+        disclaimerText,
+      };
+      await onSave(formData);
+    } catch (error) {
+      console.error("Error saving invoice:", error);
+    } finally {
+      setSaving(false);
+    }
+  };
+
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -179,10 +222,23 @@ export const InvoiceForm = () => {
               </div>
             )}
           </div>
-          <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
-            <Printer className="w-4 h-4 mr-2" />
-            Print Invoice
-          </Button>
+          <div className="flex gap-2">
+            {onSave && (
+              <Button 
+                onClick={handleSave} 
+                disabled={saving}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/10"
+              >
+                <Save className="w-4 h-4 mr-2" />
+                {saving ? "Saving..." : isNew ? "Save Invoice" : "Update Invoice"}
+              </Button>
+            )}
+            <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
+              <Printer className="w-4 h-4 mr-2" />
+              Print Invoice
+            </Button>
+          </div>
         </div>
       </div>
 
