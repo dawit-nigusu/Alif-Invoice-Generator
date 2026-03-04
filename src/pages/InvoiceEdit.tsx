@@ -27,7 +27,7 @@ const InvoiceEdit = () => {
     try {
       setLoading(true);
       const invoice = await invoiceService.getInvoiceById(id!);
-      
+
       // Convert database invoice to form data
       const formData: InvoiceFormData = {
         invoiceNumber: invoice.invoice_number,
@@ -38,13 +38,14 @@ const InvoiceEdit = () => {
         showDisclaimer: invoice.show_disclaimer,
         disclaimerText: invoice.disclaimer_text,
       };
-      
+
       setInvoiceData(formData);
     } catch (error) {
       console.error("Error loading invoice:", error);
       toast({
         title: "Error",
-        description: "Failed to load invoice. Please check your Firebase configuration.",
+        description:
+          "Failed to load invoice. Please check your Firebase configuration.",
         variant: "destructive",
       });
       navigate("/invoices");
@@ -56,11 +57,14 @@ const InvoiceEdit = () => {
   const handleSave = async (formData: InvoiceFormData) => {
     try {
       // Calculate totals
-      const subtotal = formData.items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
+      const subtotal = formData.items.reduce(
+        (sum, item) => sum + item.quantity * item.price,
+        0,
+      );
       const tax = subtotal * (formData.taxRate / 100);
       const total = subtotal + tax;
 
-      const invoice: Omit<Invoice, 'id' | 'created_at' | 'updated_at'> = {
+      const invoice: Omit<Invoice, "id" | "created_at" | "updated_at"> = {
         invoice_number: formData.invoiceNumber,
         restaurant_info: formData.restaurantInfo,
         customer_info: formData.customerInfo,
@@ -92,7 +96,8 @@ const InvoiceEdit = () => {
       console.error("Error saving invoice:", error);
       toast({
         title: "Error",
-        description: "Failed to save invoice. Please check your Firebase configuration.",
+        description:
+          "Failed to save invoice. Please check your Firebase configuration.",
         variant: "destructive",
       });
     }
@@ -115,12 +120,12 @@ const InvoiceEdit = () => {
         <Button
           variant="ghost"
           onClick={() => navigate("/invoices")}
-          className="mb-4"
+          className="mb-4 print:hidden"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Invoices
         </Button>
-        <InvoiceForm 
+        <InvoiceForm
           initialData={invoiceData}
           onSave={handleSave}
           isNew={id === undefined}

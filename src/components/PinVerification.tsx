@@ -25,7 +25,7 @@ export const PinVerification = ({ onAuthenticated }: PinVerificationProps) => {
     // Simulate a brief loading delay for better UX
     setTimeout(() => {
       if (pin === CORRECT_PIN) {
-        onAuthenticated();
+        onAuthenticated(); 
       } else {
         setError("Invalid PIN. Please try again.");
         setPin("");
