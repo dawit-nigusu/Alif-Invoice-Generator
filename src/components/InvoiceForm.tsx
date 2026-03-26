@@ -106,7 +106,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
 
   const [items, setItems] = useState<InvoiceItem[]>([]);
 
-  const [taxRate, setTaxRate] = useState(8.5);
+  const [taxRate, setTaxRate] = useState(8);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [disclaimerText, setDisclaimerText] = useState("Your total does not include tax, gratuity and 3% credit card processing fee");
