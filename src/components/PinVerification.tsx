@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, AlertCircle } from "lucide-react";
-import restaurantLogo from "@/assets/restaurant-logo.jpg";
+import restaurantLogo from "@/assets/alif logo.jpg";
 
 interface PinVerificationProps {
   onAuthenticated: () => void;
@@ -48,7 +48,7 @@ export const PinVerification = ({ onAuthenticated }: PinVerificationProps) => {
           <div className="flex justify-center">
             <img 
               src={restaurantLogo} 
-              alt="Restaurant Logo" 
+              alt="Alif Brew & Mini Mart Logo" 
               className="w-20 h-20 object-contain bg-white rounded-lg p-2 shadow-md"
             />
           </div>
