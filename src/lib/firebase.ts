@@ -18,13 +18,30 @@ const convertTimestamp = (timestamp: any): string => {
 };
 
 // Firebase configuration
+const requiredFirebaseEnvVars = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID',
+] as const;
+
+const getRequiredEnvVar = (key: (typeof requiredFirebaseEnvVars)[number]): string => {
+  const value = import.meta.env[key];
+  if (!value) {
+    throw new Error(`Missing required Firebase environment variable: ${key}`);
+  }
+  return value;
+};
+
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyAfefn2Veb3QlP7yPQgGYwYAhyP8vGapGc",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "dorobetinvoice.firebaseapp.com",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "dorobetinvoice",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "dorobetinvoice.firebasestorage.app",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "707197957332",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:707197957332:web:34422b8f0c85b1f0adf741",
+  apiKey: getRequiredEnvVar('VITE_FIREBASE_API_KEY'),
+  authDomain: getRequiredEnvVar('VITE_FIREBASE_AUTH_DOMAIN'),
+  projectId: getRequiredEnvVar('VITE_FIREBASE_PROJECT_ID'),
+  storageBucket: getRequiredEnvVar('VITE_FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: getRequiredEnvVar('VITE_FIREBASE_MESSAGING_SENDER_ID'),
+  appId: getRequiredEnvVar('VITE_FIREBASE_APP_ID'),
 };
 
 // Initialize Firebase
