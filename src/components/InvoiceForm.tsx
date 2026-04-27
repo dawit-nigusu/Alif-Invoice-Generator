@@ -51,35 +51,64 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
 
   // Predefined items with prices for Alif Brew & Mini Mart
   const predefinedItems: PredefinedItem[] = [
-    // Espresso Bar
-    { id: "espresso-single", name: "Espresso (Single Shot)", price: 2.75, category: "Espresso Bar" },
-    { id: "latte-12oz", name: "Cafe Latte (12oz)", price: 4.95, category: "Espresso Bar" },
-    { id: "cappuccino-12oz", name: "Cappuccino (12oz)", price: 4.75, category: "Espresso Bar" },
-    { id: "mocha-12oz", name: "Mocha (12oz)", price: 5.25, category: "Espresso Bar" },
-    // Cold Drinks
-    { id: "cold-brew-16oz", name: "Cold Brew (16oz)", price: 4.85, category: "Cold Drinks" },
-    { id: "iced-latte-16oz", name: "Iced Latte (16oz)", price: 5.15, category: "Cold Drinks" },
-    { id: "hibiscus-tea", name: "Hibiscus Iced Tea", price: 3.95, category: "Cold Drinks" },
-    // Bakery
-    { id: "croissant-butter", name: "Butter Croissant", price: 3.5, category: "Bakery" },
-    { id: "banana-bread", name: "Banana Bread Slice", price: 3.95, category: "Bakery" },
-    { id: "blueberry-muffin", name: "Blueberry Muffin", price: 3.75, category: "Bakery" },
-    // Mini Mart
-    { id: "sparkling-water", name: "Sparkling Water 500ml", price: 2.25, category: "Mini Mart" },
-    { id: "chips-sea-salt", name: "Sea Salt Chips", price: 2.95, category: "Mini Mart" },
-    { id: "energy-bar", name: "Protein Energy Bar", price: 3.25, category: "Mini Mart" },
-    { id: "whole-beans-12oz", name: "House Blend Whole Beans (12oz)", price: 13.99, category: "Mini Mart" },
-    // Add-ons & Services
-    { id: "extra-shot", name: "Extra Espresso Shot", price: 1.5, category: "Add-ons & Services" },
-    { id: "oat-milk", name: "Oat Milk Upgrade", price: 0.9, category: "Add-ons & Services" },
-    { id: "local-delivery", name: "Local Delivery", price: 4.99, category: "Add-ons & Services" },
+    // Appetizers
+    { id: "sambusa-lentil", name: "Sambusa - Lentil (each)", price: 1.5, category: "Appetizers" },
+    { id: "sambusa-chicken", name: "Sambusa - Chicken (each)", price: 1.5, category: "Appetizers" },
+
+    // Breakfast & Dips (served with pita bread)
+    { id: "foul-medames-half", name: "Foul Medames (Fava Bean Stew) - Half Pan", price: 50, category: "Breakfast & Dips" },
+    { id: "foul-medames-full", name: "Foul Medames (Fava Bean Stew) - Full Pan", price: 100, category: "Breakfast & Dips" },
+    { id: "shakshuka-half", name: "Shakshuka (w/ Poached Egg) - Half Pan", price: 75, category: "Breakfast & Dips" },
+    { id: "shakshuka-full", name: "Shakshuka (w/ Poached Egg) - Full Pan", price: 125, category: "Breakfast & Dips" },
+    { id: "hummus-32oz", name: "Hummus (Spicy/Plain) - 32oz", price: 30, category: "Breakfast & Dips" },
+    { id: "baba-ghanoush-32oz", name: "Baba Ghanoush - 32oz", price: 30, category: "Breakfast & Dips" },
+
+    // Salads
+    { id: "mediterranean-salad-half", name: "Mediterranean Salad - Half Pan", price: 35, category: "Salads" },
+    { id: "mediterranean-salad-full", name: "Mediterranean Salad - Full Pan", price: 75, category: "Salads" },
+    { id: "lentil-beet-salad-half", name: "Lentil & Beet Salad - Half Pan", price: 40, category: "Salads" },
+    { id: "lentil-beet-salad-full", name: "Lentil & Beet Salad - Full Pan", price: 80, category: "Salads" },
+
+    // Sides
+    { id: "cabbage-carrots-half", name: "Cabbage & Carrots - Half Pan", price: 50, category: "Sides" },
+    { id: "cabbage-carrots-full", name: "Cabbage & Carrots - Full Pan", price: 100, category: "Sides" },
+    { id: "collard-greens-half", name: "Collard Greens - Half Pan", price: 50, category: "Sides" },
+    { id: "collard-greens-full", name: "Collard Greens - Full Pan", price: 100, category: "Sides" },
+    { id: "chickpea-stew-half", name: "Chickpea Stew - Half Pan", price: 50, category: "Sides" },
+    { id: "chickpea-stew-full", name: "Chickpea Stew - Full Pan", price: 100, category: "Sides" },
+    { id: "green-beans-carrot-half", name: "Green Beans & Carrot - Half Pan", price: 50, category: "Sides" },
+    { id: "green-beans-carrot-full", name: "Green Beans & Carrot - Full Pan", price: 100, category: "Sides" },
+    { id: "beets-half", name: "Beets - Half Pan", price: 50, category: "Sides" },
+    { id: "beets-full", name: "Beets - Full Pan", price: 100, category: "Sides" },
+    { id: "spinach-half", name: "Spinach - Half Pan", price: 50, category: "Sides" },
+    { id: "spinach-full", name: "Spinach - Full Pan", price: 100, category: "Sides" },
+    { id: "rice-half", name: "Rice - Half Pan", price: 30, category: "Sides" },
+    { id: "rice-full", name: "Rice - Full Pan", price: 60, category: "Sides" },
+
+    // Mains
+    { id: "baked-salmon-piece", name: "Baked Salmon (per piece)", price: 10, category: "Mains" },
+    { id: "chicken-kabob-2pcs", name: "Chicken Kabob (2 pieces)", price: 7, category: "Mains" },
+    { id: "braised-lamb-piece", name: "Braised Lamb (per piece)", price: 10, category: "Mains" },
+
+    // Stews (served with injera)
+    { id: "misir-wot-half", name: "Misir Wot (Spicy Lentil Stew) - Half Pan", price: 50, category: "Stews" },
+    { id: "misir-wot-full", name: "Misir Wot (Spicy Lentil Stew) - Full Pan", price: 100, category: "Stews" },
+    { id: "alicha-kik-half", name: "Alicha Kik (Mild Split Peas) - Half Pan", price: 50, category: "Stews" },
+    { id: "alicha-kik-full", name: "Alicha Kik (Mild Split Peas) - Full Pan", price: 100, category: "Stews" },
+    { id: "doro-wot-half", name: "Doro Wot (Spicy Chicken Stew) - Half Pan", price: 100, category: "Stews" },
+    { id: "doro-wot-full", name: "Doro Wot (Spicy Chicken Stew) - Full Pan", price: 200, category: "Stews" },
+    { id: "siga-wot-half", name: "Siga Wot (Spicy Beef) - Half Pan", price: 160, category: "Stews" },
+    { id: "siga-wot-full", name: "Siga Wot (Spicy Beef) - Full Pan", price: 320, category: "Stews" },
+
+    // Dessert
+    { id: "baklava-tray", name: "Baklava Tray", price: 70, category: "Dessert" },
   ];
 
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
     name: "Alif Brew & Mini Mart",
-    address: "5612 Market Street, Philadelphia, PA 19139",
-    phone: "(267) 555-0148",
-    email: "hello@alifbrew.com"
+    address: "4501 Baltimore ave, Philadelphia, 19143",
+    phone: "(215) 315-8427",
+    email: ""
   });
 
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -267,36 +296,36 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
             <div className="col-span-3">
               <h3 className="font-semibold text-invoice-header mb-3">Store Details</h3>
               <div className="space-y-2 text-sm">
-                <div className="grid grid-cols-3 gap-1 items-start">
+                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
                   <Label className="text-xs text-muted-foreground">Name:</Label>
                   <Input
                     value={restaurantInfo.name}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, name: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
+                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-1 items-start">
+                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
                   <Label className="text-xs text-muted-foreground">Address:</Label>
                   <Input
                     value={restaurantInfo.address}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, address: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
+                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-1 items-start">
+                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
                   <Label className="text-xs text-muted-foreground">Phone:</Label>
                   <Input
                     value={restaurantInfo.phone}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, phone: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
+                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-1 items-start">
+                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
                   <Label className="text-xs text-muted-foreground">Email:</Label>
                   <Input
                     value={restaurantInfo.email}
                     onChange={(e) => setRestaurantInfo({...restaurantInfo, email: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
+                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
                   />
                 </div>
               </div>
