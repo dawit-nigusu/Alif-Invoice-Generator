@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Plus, Printer, Save } from "lucide-react";
-import restaurantLogo from "@/assets/restaurant-logo.jpg";
+import restaurantLogo from "@/assets/alif logo.jpg";
 import type { InvoiceFormData } from "@/types/invoice";
 
 interface InvoiceItem {
@@ -49,51 +49,37 @@ interface InvoiceFormProps {
 export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormProps) => {
   const [invoiceNumber, setInvoiceNumber] = useState(`INV-${Date.now().toString().slice(-6)}`);
 
-  // Predefined menu items with prices
+  // Predefined items with prices for Alif Brew & Mini Mart
   const predefinedItems: PredefinedItem[] = [
-    // Fried Chicken
-    { id: "alicha-mild", name: "Alicha (Turmeric Lemon - Mild)", price: 9.00, category: "Fried Chicken" },
-    { id: "awaze-spicy", name: "Awaze (Berbere Spice - Spicy)", price: 9.00, category: "Fried Chicken" },
-    { id: "chicken-sandwich", name: "Crispy Fried Chicken Sandwich", price: 13.00, category: "Fried Chicken" },
-
-    // Traditional Eats
-    { id: "doro-wot-half", name: "Doro Wot - Half", price: 120.00, category: "Traditional Eats" },
-    { id: "doro-wot-full", name: "Doro Wot - Full", price: 240.00, category: "Traditional Eats" },
-    { id: "doro-tibs-half", name: "Doro Tibs - Half", price: 130.00, category: "Traditional Eats" },
-    { id: "doro-tibs-full", name: "Doro Tibs - Full", price: 240.00, category: "Traditional Eats" },
-    
-    // Shawarma
-    { id: "shawarma-wrap", name: "Shawarma Wrap", price: 12.00, category: "Shawarma" },
-    { id: "shawarma-salad", name: "Shawarma Salad", price: 120.00, category: "Shawarma" },
-    
-    // Vegan Bites
-    { id: "enguday-half", name: "Enguday (Fried Mushrooms) - Half", price: 75.00, category: "Vegan Bites" },
-    { id: "enguday-full", name: "Enguday (Fried Mushrooms) - Full", price: 150.00, category: "Vegan Bites" },
-    { id: "falafal-salad", name: "Falafel Salad", price: 55.00, category: "Vegan Bites" },
-    { id: "falafal-wrap", name: "Falafel Wrap", price: 10.00, category: "Vegan Bites" },
-    
-    // Sides
-    { id: "mac-n-cheese-half", name: "Aida's Mac N Cheese - Half", price: 50.00, category: "Sides" },
-    { id: "mac-n-cheese-full", name: "Aida's Mac N Cheese - Full", price: 100.00, category: "Sides" },
-    { id: "addis-fries-half", name: "Addis Fries (Spiced) - Half", price: 50.00, category: "Sides" },
-    { id: "addis-fries-full", name: "Addis Fries (Spiced) - Full", price: 100.00, category: "Sides" },
-    { id: "collard-greens-half", name: "Collard Greens - Half", price: 50.00, category: "Sides" },
-    { id: "collard-greens-full", name: "Collard Greens - Full", price: 100.00, category: "Sides" },
-    
-    // Sauces & Drinks
-    { id: "sauce-8oz", name: "Sauce (8oz each)", price: 6.00, category: "Sauces & Drinks" },
-    { id: "birz-1gal", name: "Birz 1 Gallon (Fermented Honey)", price: 50.00, category: "Sauces & Drinks" },
-    { id: "kerkede-1gal", name: "Kerkede 1 Gallon (Hibiscus Iced Tea)", price: 50.00, category: "Sauces & Drinks" },
-    
-    // Services
-    { id: "delivery", name: "Delivery", price: 50.00, category: "Services" },
+    // Espresso Bar
+    { id: "espresso-single", name: "Espresso (Single Shot)", price: 2.75, category: "Espresso Bar" },
+    { id: "latte-12oz", name: "Cafe Latte (12oz)", price: 4.95, category: "Espresso Bar" },
+    { id: "cappuccino-12oz", name: "Cappuccino (12oz)", price: 4.75, category: "Espresso Bar" },
+    { id: "mocha-12oz", name: "Mocha (12oz)", price: 5.25, category: "Espresso Bar" },
+    // Cold Drinks
+    { id: "cold-brew-16oz", name: "Cold Brew (16oz)", price: 4.85, category: "Cold Drinks" },
+    { id: "iced-latte-16oz", name: "Iced Latte (16oz)", price: 5.15, category: "Cold Drinks" },
+    { id: "hibiscus-tea", name: "Hibiscus Iced Tea", price: 3.95, category: "Cold Drinks" },
+    // Bakery
+    { id: "croissant-butter", name: "Butter Croissant", price: 3.5, category: "Bakery" },
+    { id: "banana-bread", name: "Banana Bread Slice", price: 3.95, category: "Bakery" },
+    { id: "blueberry-muffin", name: "Blueberry Muffin", price: 3.75, category: "Bakery" },
+    // Mini Mart
+    { id: "sparkling-water", name: "Sparkling Water 500ml", price: 2.25, category: "Mini Mart" },
+    { id: "chips-sea-salt", name: "Sea Salt Chips", price: 2.95, category: "Mini Mart" },
+    { id: "energy-bar", name: "Protein Energy Bar", price: 3.25, category: "Mini Mart" },
+    { id: "whole-beans-12oz", name: "House Blend Whole Beans (12oz)", price: 13.99, category: "Mini Mart" },
+    // Add-ons & Services
+    { id: "extra-shot", name: "Extra Espresso Shot", price: 1.5, category: "Add-ons & Services" },
+    { id: "oat-milk", name: "Oat Milk Upgrade", price: 0.9, category: "Add-ons & Services" },
+    { id: "local-delivery", name: "Local Delivery", price: 4.99, category: "Add-ons & Services" },
   ];
 
   const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
-    name: "Doro Bet / ዶሮ ቤት",
-    address: "4533 Baltimore Ave, Philadelphia, PA 19143",
-    phone: "(215) 921-6558 ",
-    email: "dorobetphl@gmail.com"
+    name: "Alif Brew & Mini Mart",
+    address: "5612 Market Street, Philadelphia, PA 19139",
+    phone: "(267) 555-0148",
+    email: "hello@alifbrew.com"
   });
 
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -109,7 +95,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
   const [taxRate, setTaxRate] = useState(8);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
   const [showDisclaimer, setShowDisclaimer] = useState(false);
-  const [disclaimerText, setDisclaimerText] = useState("Your total does not include tax, gratuity and 3% credit card processing fee");
+  const [disclaimerText, setDisclaimerText] = useState("Prices are listed in USD. Card payments include a 3% processing fee. Returns accepted within 7 days with receipt.");
   const [saving, setSaving] = useState(false);
 
   // Load initial data if provided
@@ -161,6 +147,13 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
   const subtotal = items.reduce((sum, item) => sum + (item.quantity * item.price), 0);
   const tax = subtotal * (taxRate / 100);
   const total = subtotal + tax;
+  const groupedItems = predefinedItems.reduce<Record<string, PredefinedItem[]>>((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
+    }
+    acc[item.category].push(item);
+    return acc;
+  }, {});
 
   const handlePrint = () => {
     window.print();
@@ -193,7 +186,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center print:hidden">
-        <h1 className="text-3xl font-bold text-invoice-header">Doro Bet Invoice Generator</h1>
+        <h1 className="text-3xl font-bold text-invoice-header">Alif Brew & Mini Mart Invoice Generator</h1>
         <div className="flex items-center gap-4">
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
@@ -243,25 +236,26 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
       </div>
 
       {/* Invoice Content */}
-      <div className="bg-white shadow-lg print:shadow-none border border-border rounded-lg overflow-hidden">
+      <div className="invoice-paper bg-white shadow-lg print:shadow-none border border-border rounded-lg overflow-hidden">
         {/* Professional Invoice Header with Logo */}
         <div className="bg-invoice-header text-invoice-header-foreground p-8">
           <div className="flex justify-between items-start">
             <div className="flex items-center gap-6">
               <img 
                 src={restaurantLogo} 
-                alt="Restaurant Logo" 
-                className="w-16 h-16 object-contain bg-white rounded-lg p-2"
+                alt="Alif Brew & Mini Mart Logo" 
+                className="w-20 h-20 object-contain bg-white rounded-lg p-2 shadow-sm"
               />
               <div>
                 <h1 className="text-3xl font-bold text-white">{restaurantInfo.name}</h1>
-                <p className="text-blue-200 mt-1">Ethiopian Chicken House</p>
+                <p className="text-blue-200 mt-1">Coffee Bar | Bakery | Mini Mart</p>
               </div>
             </div>
             <div className="text-right">
-              <div className="bg-white text-invoice-header rounded-lg px-4 py-2 inline-block">
+              <div className="invoice-mono bg-white text-invoice-header rounded-lg px-4 py-2 inline-block">
                 <div className="text-sm font-medium">INVOICE No</div>
                 <div className="text-lg font-bold">{invoiceNumber}</div>
+                <div className="text-xs mt-1 opacity-80">Issued {new Date(customerInfo.date).toLocaleDateString()}</div>
               </div>
             </div>
           </div>
@@ -271,7 +265,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
         <div className="bg-invoice-section border-b p-6">
           <div className="grid grid-cols-5 gap-8">
             <div className="col-span-3">
-              <h3 className="font-semibold text-invoice-header mb-3">Contact Information</h3>
+              <h3 className="font-semibold text-invoice-header mb-3">Store Details</h3>
               <div className="space-y-2 text-sm">
                 <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Name:</Label>
@@ -308,7 +302,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
               </div>
             </div>
             <div className="col-span-2">
-              <h3 className="font-semibold text-invoice-header mb-3">Bill To</h3>
+              <h3 className="font-semibold text-invoice-header mb-3">Customer Details</h3>
               <div className="space-y-2 text-sm">
                 <div className="grid grid-cols-3 gap-1 items-start">
                   <Label className="text-xs text-muted-foreground">Bill To:</Label>
@@ -394,68 +388,18 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
                       Manual Entry
                     </div>
                   </SelectItem>
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Fried Chicken</div>
-                  {predefinedItems.filter(item => item.category === "Fried Chicken").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Traditional Eats</div>
-                  {predefinedItems.filter(item => item.category === "Traditional Eats").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Shawarma</div>
-                  {predefinedItems.filter(item => item.category === "Shawarma").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Vegan Bites</div>
-                  {predefinedItems.filter(item => item.category === "Vegan Bites").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Sides</div>
-                  {predefinedItems.filter(item => item.category === "Sides").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Sauces & Drinks</div>
-                  {predefinedItems.filter(item => item.category === "Sauces & Drinks").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">Services</div>
-                  {predefinedItems.filter(item => item.category === "Services").map((item) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{item.name}</span>
-                        <span className="text-muted-foreground ml-4">${item.price}</span>
-                      </div>
-                    </SelectItem>
+                  {Object.entries(groupedItems).map(([category, categoryItems]) => (
+                    <div key={category}>
+                      <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">{category}</div>
+                      {categoryItems.map((item) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          <div className="flex justify-between items-center w-full">
+                            <span>{item.name}</span>
+                            <span className="text-muted-foreground ml-4">${item.price.toFixed(2)}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </div>
                   ))}
                 </SelectContent>
               </Select>
@@ -491,7 +435,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
                       <Input
                         value={item.name}
                         onChange={(e) => updateItem(item.id, 'name', e.target.value)}
-                        placeholder="e.g., Margherita Pizza"
+                        placeholder="e.g., Cappuccino (12oz)"
                         className="border-none shadow-none p-0 h-auto bg-transparent focus-visible:ring-0 print:bg-transparent"
                       />
                     </div>
@@ -581,7 +525,8 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
               {disclaimerText}
             </p>
           )}
-          <p className="text-lg font-medium text-black">Thank You!</p>
+          <Separator />
+          <p className="text-sm text-muted-foreground">Thank you for choosing Alif Brew & Mini Mart.</p>
         </div>
       </div>
     </div>

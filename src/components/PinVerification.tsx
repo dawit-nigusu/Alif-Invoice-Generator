@@ -53,7 +53,7 @@ export const PinVerification = ({ onAuthenticated }: PinVerificationProps) => {
             />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-800">
-            Doro Bet Invoice Generator
+            Alif Brew & Mini Mart Invoice Generator
           </CardTitle>
           <p className="text-gray-600">Enter your 4-digit PIN to access the system</p>
         </CardHeader>

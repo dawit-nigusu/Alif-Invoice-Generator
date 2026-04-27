@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Special+Elite&display=swap');
 
 /* Print and PDF export styles */
 .print-mode {
@@ -31,6 +32,27 @@
   }
 }
 
+/* Paper-like invoice typography */
+.invoice-paper {
+  font-family: "Libre Baskerville", Georgia, serif;
+  letter-spacing: 0.01em;
+}
+
+.invoice-paper h1,
+.invoice-paper h2,
+.invoice-paper h3,
+.invoice-paper .invoice-mono {
+  font-family: "Special Elite", "Courier New", monospace;
+  letter-spacing: 0.03em;
+}
+
+.invoice-paper input,
+.invoice-paper textarea,
+.invoice-paper button,
+.invoice-paper select {
+  font-family: inherit;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -46,7 +68,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 27%;
 
-    --primary: 215 100% 50%;
+    --primary: 24 80% 42%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 215 15% 95%;
@@ -63,14 +85,14 @@ All colors MUST be HSL.
 
     --border: 215 15% 88%;
     --input: 215 15% 94%;
-    --ring: 215 100% 50%;
+    --ring: 24 80% 42%;
 
     /* Professional invoice colors */
-    --invoice-header: 215 25% 15%;
+    --invoice-header: 22 38% 20%;
     --invoice-header-foreground: 0 0% 100%;
-    --invoice-section: 215 15% 97%;
-    --invoice-total: 215 100% 45%;
-    --invoice-subtotal: 215 20% 85%;
+    --invoice-section: 36 33% 97%;
+    --invoice-total: 24 80% 42%;
+    --invoice-subtotal: 32 25% 88%;
 
     --radius: 0.5rem;
 
