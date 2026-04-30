@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Plus, Printer, Save } from "lucide-react";
-import restaurantLogo from "@/assets/alif logo.jpg";
+import alifLogo from "@/assets/alif logo.jpg";
+import salamLogo from "@/assets/salamcafephl logo.jpg";
 import type { InvoiceFormData } from "@/types/invoice";
 
 interface InvoiceItem {
@@ -31,6 +32,34 @@ interface RestaurantInfo {
   phone: string;
   email: string;
 }
+
+/** Saved on every invoice — joint catering branding for both locations */
+const JOINT_RESTAURANT_INFO: RestaurantInfo = {
+  name: "Alif Brew & Mini Mart · Salam Cafe",
+  address:
+    "Alif: 4501 Baltimore Ave, Philadelphia, PA 19143 · Salam: 5532 Greene St, Philadelphia, PA 19144",
+  phone: "(215) 315-8427 · (215) 660-9780",
+  email: "",
+};
+
+const CATERING_VENUES = [
+  {
+    name: "Alif Brew & Mini Mart",
+    address: "4501 Baltimore Ave",
+    cityLine: "Philadelphia, PA 19143",
+    phone: "(215) 315-8427",
+    logo: alifLogo,
+    logoAlt: "Alif Brew & Mini Mart logo",
+  },
+  {
+    name: "Salam Cafe",
+    address: "5532 Greene St",
+    cityLine: "Philadelphia, PA 19144",
+    phone: "(215) 660-9780",
+    logo: salamLogo,
+    logoAlt: "Salam Cafe logo",
+  },
+] as const;
 
 interface CustomerInfo {
   name: string;
@@ -104,13 +133,6 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
     { id: "baklava-tray", name: "Baklava Tray", price: 70, category: "Dessert" },
   ];
 
-  const [restaurantInfo, setRestaurantInfo] = useState<RestaurantInfo>({
-    name: "Alif Brew & Mini Mart",
-    address: "4501 Baltimore ave, Philadelphia, 19143",
-    phone: "(215) 315-8427",
-    email: ""
-  });
-
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: "",
     phone: "",
@@ -123,15 +145,16 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
 
   const [taxRate, setTaxRate] = useState(8);
   const [selectKey, setSelectKey] = useState(0); // For resetting the select component
-  const [showDisclaimer, setShowDisclaimer] = useState(false);
-  const [disclaimerText, setDisclaimerText] = useState("Prices are listed in USD. Card payments include a 3% processing fee. Returns accepted within 7 days with receipt.");
+  const [showDisclaimer, setShowDisclaimer] = useState(true);
+  const [disclaimerText, setDisclaimerText] = useState(
+    "Card payments include a 3% processing fee",
+  );
   const [saving, setSaving] = useState(false);
 
   // Load initial data if provided
   useEffect(() => {
     if (initialData) {
       setInvoiceNumber(initialData.invoiceNumber);
-      setRestaurantInfo(initialData.restaurantInfo);
       setCustomerInfo(initialData.customerInfo);
       setItems(initialData.items);
       setTaxRate(initialData.taxRate);
@@ -195,7 +218,7 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
     try {
       const formData: InvoiceFormData = {
         invoiceNumber,
-        restaurantInfo,
+        restaurantInfo: JOINT_RESTAURANT_INFO,
         customerInfo,
         items,
         taxRate,
@@ -212,179 +235,200 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
 
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center print:hidden">
-        <h1 className="text-3xl font-bold text-invoice-header">Alif Brew & Mini Mart Invoice Generator</h1>
-        <div className="flex items-center gap-4">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="disclaimer-toggle"
-                checked={showDisclaimer}
-                onCheckedChange={(checked) => setShowDisclaimer(checked === true)}
-              />
-              <Label htmlFor="disclaimer-toggle" className="text-sm">
-                Show payment disclaimer
-              </Label>
+    <div className="max-w-[1320px] mx-auto px-4 py-6 md:px-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[900px_340px] justify-center gap-6 xl:gap-8 items-start">
+        {/* Controls Panel */}
+        <aside className="order-1 xl:order-2 space-y-4 print:hidden xl:sticky xl:top-6">
+          <Card className="border-border/80 shadow-md rounded-xl bg-gradient-to-b from-white to-invoice-section/40">
+            <CardHeader className="pb-3 space-y-2">
+              <CardTitle className="text-xl text-invoice-header">Invoice Workspace</CardTitle>
+              <p className="text-sm text-muted-foreground">Manage settings and actions from one place.</p>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="rounded-md border bg-white px-3 py-2">
+                  <p className="text-muted-foreground">Invoice #</p>
+                  <p className="font-semibold text-foreground">{invoiceNumber}</p>
+                </div>
+                <div className="rounded-md border bg-white px-3 py-2">
+                  <p className="text-muted-foreground">Date</p>
+                  <p className="font-semibold text-foreground">{new Date(customerInfo.date).toLocaleDateString()}</p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="disclaimer-toggle"
+                    checked={showDisclaimer}
+                    onCheckedChange={(checked) => setShowDisclaimer(checked === true)}
+                  />
+                  <Label htmlFor="disclaimer-toggle" className="text-sm font-medium">
+                    Show payment disclaimer
+                  </Label>
+                </div>
+                {showDisclaimer && (
+                  <div className="pl-6">
+                    <Label htmlFor="disclaimer-text" className="text-xs text-muted-foreground">
+                      Disclaimer text
+                    </Label>
+                    <Textarea
+                      id="disclaimer-text"
+                      value={disclaimerText}
+                      onChange={(e) => setDisclaimerText(e.target.value)}
+                      className="mt-1 text-xs resize-none bg-white"
+                      placeholder="Enter disclaimer text..."
+                      rows={3}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <Separator />
+
+              <div className="space-y-2">
+                {onSave && (
+                  <Button
+                    onClick={handleSave}
+                    disabled={saving}
+                    variant="outline"
+                    className="w-full border-primary text-primary hover:bg-primary/10 h-10"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    {saving ? "Saving..." : isNew ? "Save Invoice" : "Update Invoice"}
+                  </Button>
+                )}
+                <Button onClick={handlePrint} className="w-full bg-primary hover:bg-primary/90 h-10">
+                  <Printer className="w-4 h-4 mr-2" />
+                  Print Invoice
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </aside>
+
+        {/* Invoice Content */}
+        <div className="order-2 xl:order-1">
+          <div className="invoice-paper bg-white shadow-xl print:shadow-none border border-border rounded-xl overflow-hidden">
+        {/* Catering header — sister restaurants (dark coffee, slightly lifted) */}
+        <div className="relative overflow-hidden border-b border-white/10 bg-gradient-to-br from-[hsl(22_38%_22%)] via-[hsl(24_32%_26%)] to-[hsl(20_36%_19%)] text-white print:border-stone-700">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.14]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 18% 15%, hsl(36 45% 52% / 0.35) 0%, transparent 42%), radial-gradient(circle at 85% 75%, hsl(215 28% 42% / 0.22) 0%, transparent 45%)",
+            }}
+          />
+          <div className="relative px-3 py-3 sm:px-4 sm:py-3.5">
+            <div className="grid gap-2 sm:grid-cols-2 sm:gap-2.5">
+              {CATERING_VENUES.map((venue) => (
+                <div
+                  key={venue.name}
+                  className="flex items-start gap-2.5 rounded-lg border border-white/18 bg-white/[0.09] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[1px] print:border-white/25 print:bg-white/10"
+                >
+                  <div className="shrink-0">
+                    <img
+                      src={venue.logo}
+                      alt={venue.logoAlt}
+                      className="h-10 w-10 rounded-md border border-white/25 bg-white object-contain p-1 shadow-sm sm:h-11 sm:w-11"
+                    />
+                  </div>
+                  <div className="min-w-0 text-[10px] leading-snug text-white/90 sm:text-xs">
+                    <p className="invoice-mono text-[11px] font-semibold text-white sm:text-xs">{venue.name}</p>
+                    <p className="mt-0.5 text-[10px] text-white/75 sm:text-[11px]">
+                      {venue.address}, {venue.cityLine}
+                    </p>
+                    <p className="mt-0.5 font-mono text-[10px] tabular-nums text-amber-100/95 sm:text-[11px]">{venue.phone}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            {showDisclaimer && (
-              <div className="ml-6">
-                <Label htmlFor="disclaimer-text" className="text-xs text-muted-foreground">
-                  Disclaimer text:
+            <div className="mt-2.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-0.5 border-t border-white/12 pt-2.5 text-[10px] sm:text-[11px]">
+              <span className="invoice-mono font-semibold tabular-nums text-white/95">{invoiceNumber}</span>
+              <span className="text-white/55">{new Date(customerInfo.date).toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Customer (paper-style, compact) */}
+        <div className="border-b bg-invoice-section px-4 py-3 print:px-3 print:py-2">
+          <div className="mb-2 border-b border-border pb-1 print:mb-1.5">
+            <h3 className="invoice-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-invoice-header">
+              Customer
+            </h3>
+          </div>
+
+          <div className="space-y-2 text-xs print:space-y-1.5">
+            <div className="grid gap-1 sm:grid-cols-[4.75rem_1fr] sm:items-start sm:gap-x-3">
+              <Label htmlFor="customer-bill-to" className="pt-1 text-[11px] text-muted-foreground print:pt-0.5">
+                Bill to
+              </Label>
+              <Textarea
+                id="customer-bill-to"
+                value={customerInfo.name}
+                onChange={(e) => setCustomerInfo({ ...customerInfo, name: e.target.value })}
+                className="min-h-[2.125rem] resize-none rounded border-border bg-white py-1 text-sm leading-snug print:border-0 print:bg-transparent print:py-0.5 print:shadow-none"
+                placeholder="Name or company"
+                rows={1}
+                onInput={(e) => {
+                  const target = e.target as HTMLTextAreaElement;
+                  target.style.height = "auto";
+                  target.style.height = `${target.scrollHeight}px`;
+                }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4">
+              <div className="grid gap-1 sm:grid-cols-[4.75rem_1fr] sm:items-center sm:gap-x-3">
+                <Label htmlFor="customer-phone" className="text-[11px] text-muted-foreground">
+                  Phone
                 </Label>
-                <Textarea
-                  id="disclaimer-text"
-                  value={disclaimerText}
-                  onChange={(e) => setDisclaimerText(e.target.value)}
-                  className="mt-1 text-xs resize-none"
-                  placeholder="Enter disclaimer text..."
-                  rows={2}
+                <Input
+                  id="customer-phone"
+                  type="tel"
+                  value={customerInfo.phone}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, phone: e.target.value })}
+                  className="h-8 rounded border-border bg-white px-2 text-sm print:border-0 print:bg-transparent print:shadow-none"
+                  placeholder="—"
                 />
               </div>
-            )}
-          </div>
-          <div className="flex gap-2">
-            {onSave && (
-              <Button 
-                onClick={handleSave} 
-                disabled={saving}
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/10"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                {saving ? "Saving..." : isNew ? "Save Invoice" : "Update Invoice"}
-              </Button>
-            )}
-            <Button onClick={handlePrint} className="bg-primary hover:bg-primary/90">
-              <Printer className="w-4 h-4 mr-2" />
-              Print Invoice
-            </Button>
-          </div>
-        </div>
-      </div>
+              <div className="grid gap-1 sm:grid-cols-[4.75rem_1fr] sm:items-center sm:gap-x-3">
+                <Label htmlFor="customer-email" className="text-[11px] text-muted-foreground">
+                  Email
+                </Label>
+                <Input
+                  id="customer-email"
+                  type="email"
+                  value={customerInfo.email}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+                  className="h-8 rounded border-border bg-white px-2 text-sm print:border-0 print:bg-transparent print:shadow-none"
+                  placeholder="—"
+                />
+              </div>
+            </div>
 
-      {/* Invoice Content */}
-      <div className="invoice-paper bg-white shadow-lg print:shadow-none border border-border rounded-lg overflow-hidden">
-        {/* Professional Invoice Header with Logo */}
-        <div className="bg-invoice-header text-invoice-header-foreground p-8">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-6">
-              <img 
-                src={restaurantLogo} 
-                alt="Alif Brew & Mini Mart Logo" 
-                className="w-20 h-20 object-contain bg-white rounded-lg p-2 shadow-sm"
-              />
-              <div>
-                <h1 className="text-3xl font-bold text-white">{restaurantInfo.name}</h1>
-                <p className="text-blue-200 mt-1">Coffee Bar | Bakery | Mini Mart</p>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-4">
+              <div className="grid gap-1 sm:grid-cols-[4.75rem_1fr] sm:items-center sm:gap-x-3">
+                <Label htmlFor="customer-date" className="text-[11px] text-muted-foreground">
+                  Date
+                </Label>
+                <Input
+                  id="customer-date"
+                  type="date"
+                  value={customerInfo.date}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, date: e.target.value })}
+                  className="h-8 rounded border-border bg-white px-2 text-sm print:border-0 print:bg-transparent print:shadow-none"
+                />
               </div>
-            </div>
-            <div className="text-right">
-              <div className="invoice-mono bg-white text-invoice-header rounded-lg px-4 py-2 inline-block">
-                <div className="text-sm font-medium">INVOICE No</div>
-                <div className="text-lg font-bold">{invoiceNumber}</div>
-                <div className="text-xs mt-1 opacity-80">Issued {new Date(customerInfo.date).toLocaleDateString()}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Restaurant Contact Info */}
-        <div className="bg-invoice-section border-b p-6">
-          <div className="grid grid-cols-5 gap-8">
-            <div className="col-span-3">
-              <h3 className="font-semibold text-invoice-header mb-3">Store Details</h3>
-              <div className="space-y-2 text-sm">
-                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
-                  <Label className="text-xs text-muted-foreground">Name:</Label>
-                  <Input
-                    value={restaurantInfo.name}
-                    onChange={(e) => setRestaurantInfo({...restaurantInfo, name: e.target.value})}
-                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
-                  />
-                </div>
-                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
-                  <Label className="text-xs text-muted-foreground">Address:</Label>
-                  <Input
-                    value={restaurantInfo.address}
-                    onChange={(e) => setRestaurantInfo({...restaurantInfo, address: e.target.value})}
-                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
-                  />
-                </div>
-                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
-                  <Label className="text-xs text-muted-foreground">Phone:</Label>
-                  <Input
-                    value={restaurantInfo.phone}
-                    onChange={(e) => setRestaurantInfo({...restaurantInfo, phone: e.target.value})}
-                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
-                  />
-                </div>
-                <div className="grid grid-cols-3 print:grid-cols-[54px_1fr] gap-1 print:gap-0 items-start">
-                  <Label className="text-xs text-muted-foreground">Email:</Label>
-                  <Input
-                    value={restaurantInfo.email}
-                    onChange={(e) => setRestaurantInfo({...restaurantInfo, email: e.target.value})}
-                    className="col-span-2 print:col-span-1 h-auto min-h-7 text-sm py-1 px-3 print:px-1 print:border-none print:shadow-none print:bg-transparent break-words"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-span-2">
-              <h3 className="font-semibold text-invoice-header mb-3">Customer Details</h3>
-              <div className="space-y-2 text-sm">
-                <div className="grid grid-cols-3 gap-1 items-start">
-                  <Label className="text-xs text-muted-foreground">Bill To:</Label>
-                  <Textarea
-                    value={customerInfo.name}
-                    onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
-                    className="col-span-2 min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent resize-none overflow-hidden"
-                    placeholder="Customer name"
-                    rows={1}
-                    onInput={(e) => {
-                      const target = e.target as HTMLTextAreaElement;
-                      target.style.height = 'auto';
-                      target.style.height = `${target.scrollHeight}px`;
-                    }}
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-1 items-start">
-                  <Label className="text-xs text-muted-foreground">Phone:</Label>
-                  <Input
-                    type="tel"
-                    value={customerInfo.phone}
-                    onChange={(e) => setCustomerInfo({...customerInfo, phone: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
-                    placeholder="Phone number"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-1 items-start">
-                  <Label className="text-xs text-muted-foreground">Email:</Label>
-                  <Input
-                    type="email"
-                    value={customerInfo.email}
-                    onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
-                    placeholder="Email address"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-1 items-start">
-                  <Label className="text-xs text-muted-foreground">Date:</Label>
-                  <Input
-                    type="date"
-                    value={customerInfo.date}
-                    onChange={(e) => setCustomerInfo({...customerInfo, date: e.target.value})}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 print:border-none print:shadow-none print:bg-transparent break-words"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-1 items-start print:hidden">
-                  <Label className="text-xs text-muted-foreground">Invoice #:</Label>
-                  <Input
-                    value={invoiceNumber}
-                    onChange={(e) => setInvoiceNumber(e.target.value)}
-                    className="col-span-2 h-auto min-h-7 text-sm py-1 px-3 break-words"
-                  />
-                </div>
+              <div className="grid gap-1 sm:grid-cols-[4.75rem_1fr] sm:items-center sm:gap-x-3">
+                <Label htmlFor="invoice-number-field" className="text-[11px] text-muted-foreground">
+                  Inv. #
+                </Label>
+                <Input
+                  id="invoice-number-field"
+                  value={invoiceNumber}
+                  onChange={(e) => setInvoiceNumber(e.target.value)}
+                  className="h-8 rounded border border-dashed border-border/80 bg-white px-2 font-mono text-sm print:border-0 print:bg-transparent print:px-0 print:shadow-none"
+                />
               </div>
             </div>
           </div>
@@ -556,6 +600,8 @@ export const InvoiceForm = ({ initialData, onSave, isNew = true }: InvoiceFormPr
           )}
           <Separator />
           <p className="text-sm text-muted-foreground">Thank you for choosing Alif Brew & Mini Mart.</p>
+        </div>
+      </div>
         </div>
       </div>
     </div>
